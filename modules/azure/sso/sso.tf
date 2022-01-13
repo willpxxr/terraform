@@ -1,8 +1,5 @@
 data "azuread_client_config" "this" {}
 
-resource "random_uuid" "this" {
-}
-
 resource "azuread_application" "this" {
   display_name = var.application
 
@@ -18,11 +15,15 @@ resource "azuread_application" "this" {
     }
   }
 
-  app_role {
-    allowed_member_types = ["User"]
-    description          = "Total ownership of the application"
-    display_name         = "Admin"
-    id                   = random_uuid.this.result
+  dynamic "app_role" {
+    for_each = var.roles
+    content {
+      allowed_member_types = ["User"]
+      display_name         = app_role.value["name"]
+      description          = app_role.value["description"]
+      id                   = app_role.value["id"]
+      value = app_role.value["name"]
+    }
   }
 
   group_membership_claims = [
@@ -32,6 +33,7 @@ resource "azuread_application" "this" {
   optional_claims {
     id_token {
       name = "groups"
+      essential = true
     }
   }
 

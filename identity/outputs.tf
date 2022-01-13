@@ -10,3 +10,10 @@ output "argocd_sso_client_id" {
 output "argocd_sso_tenant_id" {
   value = module.argocd_sso.tenant_id
 }
+
+output "argocd_sso_roles" {
+  value = [for role in local.roles: {
+    id = role.id
+    name = role.name
+  }]
+}

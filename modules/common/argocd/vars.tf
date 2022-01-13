@@ -23,3 +23,16 @@ variable "argocd_sso_client_secret" {}
 variable "argocd_sso_client_id" {}
 
 variable "argocd_sso_tenant_id" {}
+
+variable "argocd_sso_roles" {
+  type = list(
+          object({
+            id: string
+            name: string
+          })
+  )
+}
+
+variable "argocd_ingress_domain" {}
+
+variable "argocd_github_access_token" {}

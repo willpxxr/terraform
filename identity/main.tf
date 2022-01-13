@@ -9,4 +9,5 @@ module "argocd_sso" {
 
   application = "ArgoCD"
   redirect_uri = "https://localhost:8080/auth/callback"
+  roles = local.roles
 }

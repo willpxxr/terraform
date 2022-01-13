@@ -3,15 +3,19 @@ include {
 }
 
 locals {
-  common_vars = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
+  common_vars = read_terragrunt_config(find_in_parent_folders("common.hcl"))
 }
 
 dependency "identity" {
   config_path = "../../identity"
 }
 
-inputs = {
-  argocd_sso_client_secret = dependency.identity.outputs.argocd_sso_client_secret
-  argocd_sso_client_id = dependency.identity.outputs.argocd_sso_client_id
-  argocd_sso_tenant_id = dependency.identity.outputs.argocd_sso_tenant_id
-}
+inputs = merge(
+  local.common_vars.inputs,
+  {
+    argocd_sso_client_secret = dependency.identity.outputs.argocd_sso_client_secret
+    argocd_sso_client_id = dependency.identity.outputs.argocd_sso_client_id
+    argocd_sso_tenant_id = dependency.identity.outputs.argocd_sso_tenant_id
+    argocd_sso_roles = dependency.identity.outputs.argocd_sso_roles
+  }
+)

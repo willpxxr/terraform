@@ -15,4 +15,7 @@ module "argocd" {
   argocd_sso_client_id = var.argocd_sso_client_id
   argocd_sso_tenant_id = var.argocd_sso_tenant_id
   argocd_sso_client_secret = var.argocd_sso_client_secret
+  argocd_ingress_domain = format("argocd.mgmgt.%s", var.domain)
+  argocd_github_access_token = var.github_secret
+  argocd_sso_roles = var.argocd_sso_roles
 }

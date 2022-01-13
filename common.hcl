@@ -1,0 +1,3 @@
+inputs = {
+  domain = "willpxxr.com"
+}

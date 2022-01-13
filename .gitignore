@@ -35,3 +35,5 @@ override.tf.json
 terraform.rc
 
 .idea/*
+
+**/terragrunt-debug.tfvars.json

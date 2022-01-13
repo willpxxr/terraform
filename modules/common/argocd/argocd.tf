@@ -22,7 +22,7 @@ resource "helm_release" "this" {
           annotations: {}
           ingressClassName: ""
           hosts:
-            - willpxxr.com
+            - ${var.argocd_ingress_domain}
           paths:
             - /
           pathType: Prefix
@@ -40,12 +40,34 @@ resource "helm_release" "this" {
               - openid
               - profile
               - email
+        rbacConfig:
+          policy.default: "role:readonly"
+          policy.csv: |
+            ${indent(6, join("\n", [for role in var.argocd_sso_roles: format("g, %s, role:%s", role.id, role.name)]))}
+          scopes: '[roles]'
+        additionalProjects:
+          - name: bootstrap
+            namespace: argocd
+            finalizers:
+              - resources-finalizer.argocd.argoproj.io
+            description: Cluster Bootstrap Project
+            sourceRepos:
+              - '*'
+            destinations:
+              - namespace: bootstrap
+                server: https://kubernetes.default.svc
         extensions:
           contents:
             - name: argo-rollouts
               url: https://github.com/argoproj-labs/rollout-extension/releases/download/v0.1.0/extension.tar
       configs:
+        credentialTemplates:
+          https-creds:
+            url: https://github.com/willpxxr
+            username: willpxxr
+            password: ${var.argocd_github_access_token}
         secret:
+          githubSecret: ${var.argocd_github_access_token}
           extra:
             oidc.azure.clientSecret: ${var.argocd_sso_client_secret}
     EOF
