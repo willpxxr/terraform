@@ -7,7 +7,7 @@ provider "helm" {
   }
 }
 
-resource "helm_release" "this" {
+resource "helm_release" "argocd" {
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
@@ -72,4 +72,12 @@ resource "helm_release" "this" {
             oidc.azure.clientSecret: ${var.argocd_sso_client_secret}
     EOF
   ]
+}
+
+resource "helm_release" "application_set" {
+  name       = "application_set"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-applicationset"
+  namespace  = "argocd"
+  create_namespace = true
 }
