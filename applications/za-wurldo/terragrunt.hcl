@@ -19,3 +19,5 @@ inputs = merge(
     argocd_sso_roles = dependency.identity.outputs.argocd_sso_roles
   }
 )
+
+prevent_destroy = true

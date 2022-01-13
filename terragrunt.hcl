@@ -45,3 +45,5 @@ generate "provider" {
     }
     EOF
 }
+
+prevent_destroy = true

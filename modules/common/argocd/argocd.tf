@@ -54,8 +54,28 @@ resource "helm_release" "argocd" {
             sourceRepos:
               - '*'
             destinations:
-              - namespace: bootstrap
+              - namespace: argocd
                 server: https://kubernetes.default.svc
+        additionalApplications:
+          - name: bootstrap-ingress-nginx
+            namespace: argocd
+            finalizers:
+              - resources-finalizer.argocd.argoproj.io
+            project: bootstrap
+            source:
+              repoURL: https://github.com/willpxxr/gitops
+              targetRevision: HEAD
+              path: bootstrap
+            destination:
+              server: https://kubernetes.default.svc
+              namespace: argocd
+            syncPolicy:
+              automated:
+                selfHeal: true
+                prune: true
+            info:
+              - name: url
+                value: https://github.com/willpxxr/gitops/tree/main/bootstrap
         extensions:
           contents:
             - name: argo-rollouts
@@ -74,10 +94,14 @@ resource "helm_release" "argocd" {
   ]
 }
 
-resource "helm_release" "application_set" {
-  name       = "application_set"
+resource "helm_release" "applicationset" {
+  name       = "applicationset"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argocd-applicationset"
   namespace  = "argocd"
   create_namespace = true
+
+  depends_on = [
+    helm_release.argocd
+  ]
 }
