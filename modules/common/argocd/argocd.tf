@@ -54,8 +54,11 @@ resource "helm_release" "argocd" {
             sourceRepos:
               - '*'
             destinations:
-              - namespace: argocd
-                server: https://kubernetes.default.svc
+              - namespace: '*'
+                server: '*'
+            clusterResourceWhitelist:
+              - group: '*'
+                kind: '*'
         additionalApplications:
           - name: bootstrap-ingress-nginx
             namespace: argocd
