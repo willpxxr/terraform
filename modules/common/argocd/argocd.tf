@@ -60,7 +60,7 @@ resource "helm_release" "argocd" {
               - group: '*'
                 kind: '*'
         additionalApplications:
-          - name: bootstrap-ingress-nginx
+          - name: bootstrap
             namespace: argocd
             finalizers:
               - resources-finalizer.argocd.argoproj.io
