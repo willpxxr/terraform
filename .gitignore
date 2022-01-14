@@ -37,3 +37,9 @@ terraform.rc
 .idea/*
 
 **/terragrunt-debug.tfvars.json
+
+**/versions.tf
+**/backend.tf
+**/providers.tf
+
+!.terragrunt/*

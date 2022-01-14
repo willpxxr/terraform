@@ -9,41 +9,19 @@ remote_state {
     storage_account_name = "willpxxr"
     container_name       = "tfstate"
     key                  = "${path_relative_to_include()}/terraform.tfstate"
-    disable_dependency_optimization = true
   }
 }
 
-generate "provider" {
-  path = "provider.tf"
+generate "versions" {
+  path = "versions.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<-EOF
-    terraform {
-      required_providers {
-        azurerm = {
-          source = "hashicorp/azurerm"
-          version = "2.91.0"
-        }
-        helm = {
-          source = "hashicorp/helm"
-          version = "2.4.1"
-        }
-        random = {
-          source = "hashicorp/random"
-          version = "3.1.0"
-        }
-      }
-    }
+  contents = file(".terragrunt/versions.tf")
+}
 
-    provider azurerm {
-      features {}
-    }
-
-    provider helm {
-    }
-
-    provider random {
-    }
-    EOF
+generate "providers" {
+  path = "providers.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = file(".terragrunt/providers.tf")
 }
 
 prevent_destroy = true
