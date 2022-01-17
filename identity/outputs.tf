@@ -17,3 +17,12 @@ output "argocd_sso_roles" {
     name = role.name
   }]
 }
+
+output "external_dns_service_account_id" {
+  value = module.external_dns_service_account.client_id
+}
+
+output "external_dns_service_account_client_secret" {
+  value = module.external_dns_service_account.client_secret
+  sensitive = true
+}

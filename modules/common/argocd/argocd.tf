@@ -17,17 +17,23 @@ resource "helm_release" "argocd" {
   values = [
     <<-EOF
       server:
+        extraArgs:
+          - --insecure
         ingress:
           enabled: true
           annotations: {}
-          ingressClassName: ""
+          ingressClassName: nginx
           hosts:
             - ${var.argocd_ingress_domain}
           paths:
             - /
           pathType: Prefix
+          tls:
+            - hosts:
+                - ${var.argocd_ingress_domain}
+              secretName: argocd-server-tls
         config:
-          url: https://localhost:8080
+          url: https://${var.argocd_ingress_domain}
           oidc.config: |
             name: Azure
             issuer: https://login.microsoftonline.com/${var.argocd_sso_tenant_id}/v2.0
