@@ -29,7 +29,10 @@ jobs:
           sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
       - name: Terragrunt
         env:
-          TF_VAR_client_secret: ${{secrets.TERRAFORM_CLIENT_SECRET}}
+          ARM_TENANT_ID: f96bf61a-8913-4999-9e1d-eff3a996f979
+          ARM_SUBSCRIPTION_ID: a653fcc5-5b9c-4d8e-820d-7cd61fb8c3d8
+          ARM_CLIENT_ID: 7e278bb3-6f57-40c4-ad50-04ba578f89bf
+          ARM_CLIENT_SECRET: ${{secrets.TERRAFORM_CLIENT_SECRET}}
         run: |
           terragrunt run-all init
           terragrunt run-all plan
