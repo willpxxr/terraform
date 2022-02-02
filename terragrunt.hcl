@@ -22,6 +22,7 @@ generate "providers" {
   path = "providers.tf"
   if_exists = "overwrite_terragrunt"
   contents = file(".terragrunt/providers.tf")
+
 }
 
 prevent_destroy = true
