@@ -27,10 +27,11 @@ jobs:
           wget https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
           chmod +x ./terragrunt_linux_amd64
           sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
-      - name: Terragrunt Plan
+      - name: Terragrunt
         env:
           TF_VAR_client_secret: ${{secrets.TERRAFORM_CLIENT_SECRET}}
         run: |
+          terragrunt run-all init
           terragrunt run-all plan
       - uses: actions/github-script@v5
         with:
