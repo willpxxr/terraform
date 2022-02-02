@@ -1,0 +1,43 @@
+name: Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  TERRAFORM_VERSION: 1.1.3
+  TERRAGRUNT_VERSION: 0.31.3
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Terraform
+        run: |
+          wget https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip
+          unzip terraform_$TERRAFORM_VERSION_linux_amd64.zip
+          sudo mv ./terraform /usr/local/bin
+          rm -rf terraform_$TERRAFORM_VERSION_linux_amd64.zip
+      - name: Install Terragrunt
+        run: |
+          wget https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64 -o terragrunt
+          sudo mv ./terragrunt /usr/local/bin
+      - name: Terragrunt Plan
+        env:
+          TF_VAR_client_secret: ${{secrets.TERRAFORM_CLIENT_SECRET}}
+        run: |
+          terragrunt run-all plan
+      - uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'TODO: terraform plan output'
+            })

@@ -26,3 +26,12 @@ output "external_dns_service_account_client_secret" {
   value = module.external_dns_service_account.client_secret
   sensitive = true
 }
+
+output "terraform_service_account_id" {
+  value = module.terraform_service_account.client_id
+}
+
+output "terraform_service_account_client_secret" {
+  value = module.terraform_service_account.client_secret
+  sensitive = true
+}
